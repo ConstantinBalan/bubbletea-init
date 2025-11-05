@@ -1,4 +1,4 @@
-module bubbletea-init
+module github.com/ConstantinBalan/bubbletea-init
 
 go 1.23.0
 

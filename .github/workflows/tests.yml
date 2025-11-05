@@ -23,8 +23,19 @@ jobs:
     - name: Install dependencies
       run: go mod tidy
 
-    - name: Run tests
-      run: go test -v ./...
+    - name: Run tests with coverage
+      run: |
+        go test -v -coverprofile=coverage.out ./tests/...
+        go tool cover -func=coverage.out
 
     - name: Run test with race detection
-      run: go test -race -v ./...
+      run: go test -race -v ./tests/...
+
+    - name: Generate coverage report
+      run: go tool cover -html=coverage.out -o coverage.html
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage.html
