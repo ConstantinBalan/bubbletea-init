@@ -31,7 +31,15 @@ jobs:
     - name: Run test with race detection
       run: go test -race -v ./tests/...
 
-    - name: Generate coverage report
+    - name: Install goveralls
+      run: go install github.com/mattn/goveralls@latest
+
+    - name: Send coverage to Coveralls
+      env:
+        COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+      run: goveralls -coverprofile=coverage.out -service=github
+
+    - name: Generate HTML coverage report
       run: go tool cover -html=coverage.out -o coverage.html
 
     - name: Upload coverage report
