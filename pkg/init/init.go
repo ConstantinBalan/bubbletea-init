@@ -12,6 +12,9 @@ import (
 	"github.com/spf13/pflag"
 )
 
+// Exit is used instead of direct calls to os.Exit so tests can override it.
+var Exit = os.Exit
+
 //go:embed templates/main.go.tmpl
 var mainTemplate string
 
@@ -31,9 +34,7 @@ var (
 		PaddingRight(1)
 )
 
-// Initialize creates a new Bubble Tea project with the given arguments
 func Initialize() {
-	// Define flags
 	withBubbles := pflag.Bool("with-bubbles", false, "Include example bubble components (spinner, textinput)")
 	modPath := pflag.String("mod", "", "Custom Go module name")
 	outputDir := pflag.StringP("output-dir", "o", "", "Directory where the project should be created (default: current directory)")
@@ -46,33 +47,30 @@ func Initialize() {
 		fmt.Println("Usage: bubbletea-init [flags] <project-name>")
 		fmt.Println("\nFlags:")
 		pflag.PrintDefaults()
-		os.Exit(0)
+		Exit(0)
 	}
 
 	projectName := pflag.Arg(0)
-
-	// Handle output directory
 	var projectDir string
+
 	if *outputDir != "" {
-		// Create output directory if it doesn't exist
 		if err := os.MkdirAll(*outputDir, 0755); err != nil {
 			fmt.Printf("Error creating output directory '%s': %v\n", *outputDir, err)
-			os.Exit(1)
+			Exit(1)
 		}
 		projectDir = filepath.Join(*outputDir, projectName)
 	} else {
 		projectDir = filepath.Join(".", projectName)
 	}
 
-	// Check if project directory exists
 	if _, err := os.Stat(projectDir); !os.IsNotExist(err) && !*force {
 		fmt.Printf("Error: Directory '%s' already exists. Use --force to overwrite.\n", projectDir)
-		os.Exit(1)
+		Exit(1)
 	}
 
 	if err := os.MkdirAll(projectDir, 0755); err != nil {
 		fmt.Printf("Error creating project directory '%s': %v\n", projectDir, err)
-		os.Exit(1)
+		Exit(1)
 	}
 
 	data := templateData{
@@ -94,16 +92,15 @@ func Initialize() {
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, data); err != nil {
 		fmt.Println("Error executing template:", err)
-		os.Exit(1)
+		Exit(1)
 	}
 
 	mainFile := filepath.Join(projectDir, "main.go")
 	if err := os.WriteFile(mainFile, buf.Bytes(), 0644); err != nil {
 		fmt.Println("Error writing main.go:", err)
-		os.Exit(1)
+		Exit(1)
 	}
 
-	// Create go.mod with custom module path or default
 	modName := *modPath
 	if modName == "" {
 		modName = fmt.Sprintf("github.com/%s/%s", "yourusername", projectName)
@@ -131,7 +128,7 @@ require github.com/charmbracelet/bubbletea v0.25.0
 
 	if err := os.WriteFile(filepath.Join(projectDir, "go.mod"), []byte(goModContent), 0644); err != nil {
 		fmt.Println("Error writing go.mod:", err)
-		os.Exit(1)
+		Exit(1)
 	}
 
 	successMsg := style.Render("✅ Success!")
