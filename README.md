@@ -4,8 +4,6 @@ A CLI tool to quickly scaffold new [Bubble Tea](https://github.com/charmbracelet
 
 [![Tests](https://github.com/ConstantinBalan/bubbletea-init/actions/workflows/tests.yml/badge.svg)](https://github.com/ConstantinBalan/bubbletea-init/actions/workflows/tests.yml)
 
-[![Coverage Status](https://coveralls.io/repos/github/ConstantinBalan/bubbletea-init/badge.svg?branch=main)](https://coveralls.io/github/ConstantinBalan/bubbletea-init?branch=main)
-
 ## Features
 
 - Create basic Bubble Tea projects
