@@ -86,7 +86,7 @@ func Initialize() {
 	tmpl, err := template.New("main").Parse(templateContent)
 	if err != nil {
 		fmt.Println("Error parsing template:", err)
-		os.Exit(1)
+		Exit(1)
 	}
 
 	var buf bytes.Buffer

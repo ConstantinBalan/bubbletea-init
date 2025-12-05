@@ -21,7 +21,6 @@ func TestCustomModulePath(t *testing.T) {
 	envCleanup := setupTestEnv(t, projectDir)
 	defer envCleanup()
 
-	// Run the test
 	os.Args = []string{"bubbletea-init", "--mod", "github.com/testuser/testmod", "testmod"}
 	initialize.Initialize()
 
@@ -41,7 +40,6 @@ func TestForceOverwrite(t *testing.T) {
 	envCleanup := setupTestEnv(t, projectDir)
 	defer envCleanup()
 
-	// Create initial content
 	targetDir := filepath.Join(projectDir, "testforce")
 	require.NoError(t, os.MkdirAll(targetDir, 0755))
 	require.NoError(t, os.WriteFile(
@@ -50,7 +48,6 @@ func TestForceOverwrite(t *testing.T) {
 		0644,
 	))
 
-	// Run the test with force flag
 	os.Args = []string{"bubbletea-init", "--force", "testforce"}
 	initialize.Initialize()
 

@@ -21,7 +21,6 @@ func TestCustomOutputDirectory(t *testing.T) {
 	envCleanup := setupTestEnv(t, projectDir)
 	defer envCleanup()
 
-	// Run the test
 	os.Args = []string{"bubbletea-init", "-o", "custom/path", "testoutput"}
 	initialize.Initialize()
 
